@@ -50,8 +50,8 @@ A Random Forest classifier with Leave-One-Tournament-Out cross-validation is use
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/irieti/fifa.git
-cd fifa
+git clone https://github.com/liambarry01/world-cup.git
+cd world-cup
 ```
 
 ### 2. Install dependencies
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 ### 3. Run data preparation
 
 ```bash
-python3 fifa_data.py
+python fifa_data.py
 ```
 
 This reads the Kaggle rankings and all CSV files to generate:
@@ -73,7 +73,7 @@ This reads the Kaggle rankings and all CSV files to generate:
 ### 4. Run the model
 
 ```bash
-python3 fifa_model.py
+python fifa_model.py
 ```
 
 This trains the Random Forest model and prints win probabilities for all 2026 qualified teams.
