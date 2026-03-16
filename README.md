@@ -85,7 +85,7 @@ This trains the Random Forest model and prints win probabilities for all 2026 qu
 ```
 fifa-predictor/
 ├── fifa_data.py               # Data preparation
-├── fifa_model.py              # Model training + prediction
+├── fifa_model.ipynb              # Model training + prediction
 ├── fifa_ranking-2024-06-20.csv  # Kaggle historical rankings
 ├── fifa_rankings_2026.csv     # January 2026 FIFA rankings
 ├── wc_results.csv             # Tournament results 1998–2022
