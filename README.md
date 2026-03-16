@@ -111,6 +111,16 @@ matplotlib
 
 ---
 
+## Potential Improvements
+
+- **Simulate the tournament bracket** — rather than predicting outright winners, simulate match-by-match outcomes to produce path-dependent probabilities
+- **Add recent form features** — incorporate win/draw/loss record from the 12 months prior to each tournament, not just FIFA rank/points
+- **Head-to-head records** — include historical matchup data between teams as an additional feature
+- **Expand training data** — include pre-1998 tournaments (1930–1994) to increase the training set, despite older ranking data being less reliable
+- **Calibrate probabilities** — apply Platt scaling or isotonic regression so that predicted probabilities better reflect true likelihoods
+
+---
+
 ## Stage Reference
 
 Stage values used in `wc_results.csv`:
