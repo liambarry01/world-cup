@@ -20,14 +20,15 @@ def get_rankings_at_date(target_date):
     target = pd.Timestamp(target_date)
     closest = rankings_all[rankings_all["rank_date"] <= target]["rank_date"].max()
     df = rankings_all[rankings_all["rank_date"] == closest].copy()
-    return df.rename(
+    df = df.rename(
         columns={
             "country_full": "team",
             "country_abrv": "country_code",
             "total_points": "fifa_points",
             "rank": "fifa_rank",
         }
-    )[["team", "country_code", "fifa_rank", "fifa_points", "confederation"]]
+    )
+    return df[["team", "country_code", "fifa_rank", "fifa_points", "confederation"]]
 
 
 # Load WC results and history CSVs
