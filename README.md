@@ -73,8 +73,10 @@ This reads the Kaggle rankings and all CSV files to generate:
 ### 4. Run the model
 
 ```bash
-python fifa_model.py
+jupyter notebook fifa_model.ipynb
 ```
+
+Then open `fifa_model.ipynb` in your browser and run all cells.
 
 This trains the Random Forest model and prints win probabilities for all 2026 qualified teams.
 
@@ -85,7 +87,7 @@ This trains the Random Forest model and prints win probabilities for all 2026 qu
 ```
 fifa-predictor/
 ├── fifa_data.py               # Data preparation
-├── fifa_model.ipynb              # Model training + prediction
+├── fifa_model.ipynb           # Model training + prediction
 ├── fifa_ranking-2024-06-20.csv  # Kaggle historical rankings
 ├── fifa_rankings_2026.csv     # January 2026 FIFA rankings
 ├── wc_results.csv             # Tournament results 1998–2022
