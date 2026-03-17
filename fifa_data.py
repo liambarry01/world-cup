@@ -15,7 +15,7 @@ WC_START_DATES = {
 
 rankings_all = pd.read_csv("fifa_ranking-2024-06-20.csv", parse_dates=["rank_date"])
 
-
+# FIFA rankings lookup
 def get_rankings_at_date(target_date):
     target = pd.Timestamp(target_date)
     closest = rankings_all[rankings_all["rank_date"] <= target]["rank_date"].max()
@@ -31,25 +31,26 @@ def get_rankings_at_date(target_date):
     return df[["team", "country_code", "fifa_rank", "fifa_points", "confederation"]]
 
 
-# Load WC results and history CSVs
+# wc_results: one row per team per tournament — final stage reached and whether they won (target labels)
+# wc_history: one row per team per tournament — appearances and wins *going into* that year (pedigree features, no leakage)
 wc_results = pd.read_csv("wc_results.csv")
 wc_history = pd.read_csv("wc_history.csv")
 print(f"WC results: {len(wc_results)} rows | WC history: {len(wc_history)} rows")
 
-# Build training data
+# Build training data — join rankings + history + results for each tournament
 rows = []
 for year, date in WC_START_DATES.items():
     rankings = get_rankings_at_date(date)
     rank_lookup = {
-        r.team: (r.fifa_rank, r.fifa_points, r.confederation)
+        r.team: (r.fifa_rank, r.fifa_points, r.confederation)  # fast lookup: team → rank/points/conf
         for r in rankings.itertuples(index=False)
     }
 
     year_results = wc_results[wc_results["year"] == year]
     year_history = wc_history[wc_history["year"] == year].set_index("team")
 
-    for res in year_results.itertuples(index=False):
-        team = res.team
+    for result in year_results.itertuples(index=False):
+        team = result.team
         if team not in rank_lookup:
             continue
         fifa_rank, fifa_points, confederation = rank_lookup[team]
@@ -67,9 +68,9 @@ for year, date in WC_START_DATES.items():
                 "confederation_code": CONF_MAP.get(confederation, 4),
                 "wc_appearances": appearances,
                 "prev_wc_wins": prev_wins,
-                "is_host": int(res.is_host),
-                "stage_reached": int(res.stage_reached),
-                "won": int(res.won),
+                "is_host": int(result.is_host),
+                "stage_reached": int(result.stage_reached),
+                "won": int(result.won),
             }
         )
 
@@ -80,7 +81,7 @@ print(f"Winners: {training_df[training_df['won']==1]['team'].tolist()}")
 print(training_df[["team", "year", "fifa_rank", "confederation", "stage_reached", "won"]].head(15).to_string(index=False))
 
 # Build 2026 prediction data
-rankings_2026 = pd.read_csv("fifa_rankings_2026.csv")
+rankings_2026 = pd.read_csv("fifa_rankings_2026.csv")  # January 2026 rankings
 
 # Load 2026 history from a separate CSV (wc_history_2026.csv)
 # This file has one row per team with their total appearances and wins going into 2026
@@ -93,8 +94,8 @@ except FileNotFoundError:
 HOSTS_2026 = {"United States", "Canada", "Mexico"}
 
 rows_2026 = []
-for r in rankings_2026.itertuples(index=False):
-    team = r.team
+for row in rankings_2026.itertuples(index=False):
+    team = row.team
     hist = history_2026.loc[team] if team in history_2026.index else None
     appearances = hist["wc_appearances"] if hist is not None else 0
     prev_wins = hist["prev_wc_wins"] if hist is not None else 0
@@ -102,11 +103,11 @@ for r in rankings_2026.itertuples(index=False):
     rows_2026.append(
         {
             "team": team,
-            "country_code": r.country_code,
-            "fifa_rank": r.fifa_rank,
-            "fifa_points": r.fifa_points,
-            "confederation": r.confederation,
-            "confederation_code": CONF_MAP.get(r.confederation, 4),
+            "country_code": row.country_code,
+            "fifa_rank": row.fifa_rank,
+            "fifa_points": row.fifa_points,
+            "confederation": row.confederation,
+            "confederation_code": CONF_MAP.get(row.confederation, 4),
             "wc_appearances": appearances,
             "prev_wc_wins": prev_wins,
             "is_host": int(team in HOSTS_2026),
