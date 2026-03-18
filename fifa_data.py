@@ -1,3 +1,24 @@
+"""
+Data pipeline for FIFA World Cup 2026 predictions.
+
+Builds two datasets:
+1. world_cup_training.csv — one row per team per tournament (1998–2022, ~206 rows).
+   Each row is a team's profile *before* that World Cup started, plus whether they won.
+2. world_cup_2026.csv — the same profile for each 2026 qualified team, ready for prediction.
+
+Features per row:
+- fifa_rank / fifa_points   — FIFA ranking at the time of the tournament
+- confederation_code        — which continent (UEFA, CONMEBOL, etc.)
+- wc_appearances            — how many World Cups they'd been to *before* this one
+- prev_wc_wins              — how many times they'd won *before* this one
+- is_host                   — whether they're hosting
+
+Target (training only):
+- won                       — 1 if the team won that World Cup, 0 otherwise
+
+Everything is knowable before kickoff, so there's no data leakage from the future.
+"""
+
 import pandas as pd
 
 # Six continental confederations in football for World Cup qualification
@@ -32,7 +53,7 @@ def get_rankings_at_date(target_date):
 
 
 # wc_results: one row per team per tournament — final stage reached and whether they won (target labels)
-# wc_history: one row per team per tournament — appearances and wins *going into* that year (pedigree features, no leakage)
+# wc_history: one row per team per tournament — appearances and wins *going into* that year ('pedigree' features, no leakage)
 wc_results = pd.read_csv("wc_results.csv")
 wc_history = pd.read_csv("wc_history.csv")
 print(f"WC results: {len(wc_results)} rows | WC history: {len(wc_history)} rows")
@@ -42,7 +63,7 @@ rows = []
 for year, date in WC_START_DATES.items():
     rankings = get_rankings_at_date(date)
     rank_lookup = {
-        row['team']: (row["fifa_rank"], row["fifa_points"], row["confederation"])  # lookup: team → rank/points/conf
+        row['team']: (row["fifa_rank"], row["fifa_points"], row["confederation"])  # lookup: team → rank/points/confederation
         for idx, row in rankings.iterrows()
     }
 
