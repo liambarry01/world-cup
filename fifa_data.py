@@ -42,15 +42,15 @@ rows = []
 for year, date in WC_START_DATES.items():
     rankings = get_rankings_at_date(date)
     rank_lookup = {
-        r.team: (r.fifa_rank, r.fifa_points, r.confederation)  # fast lookup: team → rank/points/conf
-        for r in rankings.itertuples(index=False)
+        row['team']: (row["fifa_rank"], row["fifa_points"], row["confederation"])  # lookup: team → rank/points/conf
+        for idx, row in rankings.iterrows()
     }
 
     year_results = wc_results[wc_results["year"] == year]
     year_history = wc_history[wc_history["year"] == year].set_index("team")
 
-    for result in year_results.itertuples(index=False):
-        team = result.team
+    for idx, result in year_results.iterrows():
+        team = result['team']
         if team not in rank_lookup:
             continue
         fifa_rank, fifa_points, confederation = rank_lookup[team]
@@ -68,9 +68,9 @@ for year, date in WC_START_DATES.items():
                 "confederation_code": CONF_MAP.get(confederation, 4),
                 "wc_appearances": appearances,
                 "prev_wc_wins": prev_wins,
-                "is_host": int(result.is_host),
-                "stage_reached": int(result.stage_reached),
-                "won": int(result.won),
+                "is_host": int(result['is_host']),
+                "stage_reached": int(result['stage_reached']),
+                "won": int(result['won']),
             }
         )
 
@@ -94,8 +94,8 @@ except FileNotFoundError:
 HOSTS_2026 = {"United States", "Canada", "Mexico"}
 
 rows_2026 = []
-for row in rankings_2026.itertuples(index=False):
-    team = row.team
+for idx, row in rankings_2026.iterrows():
+    team = row['team']
     hist = history_2026.loc[team] if team in history_2026.index else None
     appearances = hist["wc_appearances"] if hist is not None else 0
     prev_wins = hist["prev_wc_wins"] if hist is not None else 0
@@ -103,11 +103,11 @@ for row in rankings_2026.itertuples(index=False):
     rows_2026.append(
         {
             "team": team,
-            "country_code": row.country_code,
-            "fifa_rank": row.fifa_rank,
-            "fifa_points": row.fifa_points,
-            "confederation": row.confederation,
-            "confederation_code": CONF_MAP.get(row.confederation, 4),
+            "country_code": row['country_code'],
+            "fifa_rank": row['fifa_rank'],
+            "fifa_points": row['fifa_points'],
+            "confederation": row['confederation'],
+            "confederation_code": CONF_MAP.get(row['confederation'], 4),
             "wc_appearances": appearances,
             "prev_wc_wins": prev_wins,
             "is_host": int(team in HOSTS_2026),
