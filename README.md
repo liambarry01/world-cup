@@ -74,8 +74,8 @@ No single CSV has everything the model needs. Each one provides a different piec
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/irieti/fifa.git
-cd fifa
+git clone https://github.com/liambarry01/world-cup.git
+cd world-cup
 ```
 
 ### 2. Install dependencies
@@ -87,7 +87,7 @@ pip install -r requirements.txt
 ### 3. Run data preparation
 
 ```bash
-python3 fifa_data.py
+python fifa_data.py
 ```
 
 This reads the Kaggle rankings and all CSV files to generate:
@@ -97,8 +97,10 @@ This reads the Kaggle rankings and all CSV files to generate:
 ### 4. Run the model
 
 ```bash
-python3 fifa_model.py
+jupyter notebook fifa_model.ipynb
 ```
+
+Then open `fifa_model.ipynb` in your browser and run all cells.
 
 This trains the Random Forest model and prints win probabilities for all 2026 qualified teams.
 
@@ -109,7 +111,7 @@ This trains the Random Forest model and prints win probabilities for all 2026 qu
 ```
 fifa-predictor/
 ├── fifa_data.py               # Data preparation
-├── fifa_model.py              # Model training + prediction
+├── fifa_model.ipynb           # Model training + prediction
 ├── fifa_ranking-2024-06-20.csv  # Kaggle historical rankings
 ├── fifa_rankings_2026.csv     # January 2026 FIFA rankings
 ├── wc_results.csv             # Tournament results 1998–2022
