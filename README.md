@@ -35,7 +35,7 @@ A Random Forest classifier with Leave-One-Tournament-Out cross-validation is use
 
 ## Data Pipeline
 
-Each row in the training data is **one team entering one World Cup**. For the 7 tournaments from 1998–2022 that gives around 206 rows. Every feature is something you'd know before the tournament starts:
+Each row in the training data is **one team entering one World Cup**. For the 7 tournaments from 1998–2022 that gives 206 rows. Every feature is something you'd know before the tournament starts:
 
 | Feature | What it captures | Example (England 2022) |
 |---|---|---|
