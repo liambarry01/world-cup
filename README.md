@@ -1,4 +1,4 @@
-# ⚽ FIFA World Cup 2026 — AI Predictor
+# ⚽ FIFA World Cup 2026 Predictor
 
 A machine learning model that predicts the winner of the 2026 FIFA World Cup using real historical FIFA ranking data and Random Forest classification.
 
